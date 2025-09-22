@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:shopping_cart/providers/cart_provider.dart';
 import 'package:shopping_cart/providers/product_list_provider.dart';
 import 'package:shopping_cart/screens/home_screen.dart';
+import 'package:shopping_cart/screens/login_screen.dart';
+import 'package:shopping_cart/services/auth_sqlite_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AuthSqliteService().OpenDatabaseFunc(); 
   runApp(
     MultiProvider(
       providers: [
@@ -29,7 +33,7 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen());
+      home: LoginScreen());
       },
     );
   }

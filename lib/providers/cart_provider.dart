@@ -71,5 +71,68 @@ Future<void> sharedSil() async{
     }
     return toplam;
   }
+ // SQLITE Bölümü için
+ Future<void> sharedEkleSQLite() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cartStringList = _cartList
+        .map((item) => jsonEncode(item.toJson()))
+        .toList();
+    await prefs.setStringList('cartSQ', cartStringList);
+  }
 
+  Future<void> sharedOkuSQLite() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cartStringList = prefs.getStringList('cartSQ') ?? [];
+
+    _cartList = cartStringList
+        .map((item) => ProductModels.fromJson(jsonDecode(item)))
+        .toList();
+    notifyListeners();
+  }
+
+Future<void> sharedSilSQLite() async{
+  _cartList.clear();
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('cartSQ');
+  notifyListeners();
+}
+
+  void sepeteEkleSQLite(ProductModels product) {
+    for (var item in _cartList) {
+      if (item.title == product.title) {
+        item.quantity++;
+        return;
+      }
+        sharedEkle();
+        notifyListeners();
+    }
+
+    _cartList.add(product);
+    sharedEkle();
+    notifyListeners();
+  }
+
+  void sayacArtirSQLite(int index) {
+    _cartList[index].quantity++;
+    sharedEkle();
+    notifyListeners();
+  }
+
+  void sayacAzaltSQLite(int index) {
+    if(_cartList[index].quantity > 1){
+      _cartList[index].quantity--;
+    } else {
+      _cartList.removeAt(index);
+    }
+    sharedEkle();
+    notifyListeners();
+  }
+
+  double toplamHesaplaSQLite() {
+    double toplam = 0;
+    for (var item in _cartList) {
+      toplam += item.price * item.quantity;
+    }
+    return toplam;
+  }
 }
