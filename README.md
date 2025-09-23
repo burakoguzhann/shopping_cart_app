@@ -21,4 +21,3 @@ It was done with State management Provider.
 Products from the API were listed by sending an http.post request to FakeAPI. 
 Sharedpref. was used to ensure that products added to the cart remained in the cart. 
 
-Translated with DeepL.com (free version)
